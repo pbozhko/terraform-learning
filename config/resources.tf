@@ -15,7 +15,14 @@ resource "aws_instance" "my_web_server" {
     aws_security_group.my_webserver_sg
   ]
 
-  user_data = file("user_data.sh")
+  user_data = templatefile("user_data.sh.tpl", {
+    f_name = "Pavel",
+    l_name = "Bazhko",
+    names = [
+      "str1",
+      "str2"
+    ]
+  })
 
   tags = {
     Name = "My Web Server Instance"
@@ -50,7 +57,7 @@ resource "aws_security_group" "my_webserver_sg" {
     protocol  = "-1"
     to_port   = 0
     cidr_blocks = [
-      "0.0.0.0.0/0"
+      "0.0.0.0/0"
     ]
   }
 

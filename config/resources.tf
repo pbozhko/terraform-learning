@@ -1,27 +1,66 @@
+# This is a comment line
+
+/*
+  This is a multiline comment
+*/
+
 provider "aws" {}
 
-resource "aws_instance" "adapt_instance_ubuntu" {
+resource "aws_instance" "my_web_server" {
 
-  count         = 1
   ami           = "ami-4d6as54f5as4f6asf46a"
   instance_type = "t3.micro"
 
+  vpc_security_group_ids = [
+    aws_security_group.my_webserver_sg
+  ]
+
+  user_data = <<EOF
+#!/bin/bash
+yum -y update
+yum -y install httpd
+...
+sudo service httpd start
+EOF
+
   tags = {
-    Name    = "Test AWS Ubuntu Instance",
-    Owner   = "Pavel Bazhko",
-    Project = "Terraform Lessons"
+    Name = "My Web Server Instance"
   }
 }
 
-resource "aws_instance" "adapt_instance_centos" {
+resource "aws_security_group" "my_webserver_sg" {
 
-  count         = 2
-  ami           = "ami-0302f3ec240b9d23c"
-  instance_type = "t3.micro"
+  name        = "WebServer Security Group"
+  description = "My first security group"
+
+  ingress {
+    from_port = 80
+    to_port   = 80
+    protocol  = "tcp"
+    cidr_blocks = [
+      "0.0.0.0/0"
+    ]
+  }
+
+  ingress {
+    from_port = 443
+    to_port   = 443
+    protocol  = "tcp"
+    cidr_blocks = [
+      "0.0.0.0/0"
+    ]
+  }
+
+  egress {
+    from_port = 0
+    protocol  = "-1"
+    to_port   = 0
+    cidr_blocks = [
+      "0.0.0.0.0/0"
+    ]
+  }
 
   tags = {
-    Name    = "Test AWS Centos Instance",
-    Owner   = "Pavel Bazhko",
-    Project = "Terraform Lessons"
+    Name = "My Web Server Security Group"
   }
 }

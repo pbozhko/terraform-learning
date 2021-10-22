@@ -15,13 +15,7 @@ resource "aws_instance" "my_web_server" {
     aws_security_group.my_webserver_sg
   ]
 
-  user_data = <<EOF
-#!/bin/bash
-yum -y update
-yum -y install httpd
-...
-sudo service httpd start
-EOF
+  user_data = file("user_data.sh")
 
   tags = {
     Name = "My Web Server Instance"

@@ -1,6 +1,6 @@
 provider "aws" {}
 
-resource "aws_instance" "adapt_instance_ubuntu" {
+resource "aws_instance" "test_instance_ubuntu" {
 
   count         = 1
   ami           = "ami-4d6as54f5as4f6asf46a"
@@ -13,7 +13,7 @@ resource "aws_instance" "adapt_instance_ubuntu" {
   }
 }
 
-resource "aws_instance" "adapt_instance_centos" {
+resource "aws_instance" "test_instance_centos" {
 
   count         = 2
   ami           = "ami-0302f3ec240b9d23c"

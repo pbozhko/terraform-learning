@@ -6,6 +6,10 @@
 
 provider "aws" {}
 
+data "aws_availability_zones" "working" {}
+data "aws_region" "current" {}
+data "aws_caller_identity" "current" {}
+
 resource "aws_instance" "my_web_server" {
 
   ami           = "ami-4d6as54f5as4f6asf46a"

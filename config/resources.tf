@@ -61,4 +61,14 @@ resource "aws_security_group" "my_webserver_sg" {
   tags = {
     Name = "My Web Server Security Group"
   }
+
+  lifecycle {
+    prevent_destroy       = false
+    ignore_changes        = ["ami", "user_data"]
+    create_before_destroy = true
+  }
+}
+
+resource "aws_eip" "my_static_ip" {
+  instance = aws_instance.my_web_server.id
 }

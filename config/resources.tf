@@ -10,9 +10,20 @@ data "aws_availability_zones" "working" {}
 data "aws_region" "current" {}
 data "aws_caller_identity" "current" {}
 
+data "aws_ami" "latest_ubuntu" {
+  owners = [
+  "4657812154345"]
+  most_recent = true
+  filter {
+    name = "name"
+    values = [
+    "ubuntu/images/ubuntu-bionic-18.04-amd64-server-*"]
+  }
+}
+
 resource "aws_instance" "my_web_server" {
 
-  ami           = "ami-4d6as54f5as4f6asf46a"
+  ami           = data.aws_ami.latest_ubuntu.id
   instance_type = "t3.micro"
 
   vpc_security_group_ids = [

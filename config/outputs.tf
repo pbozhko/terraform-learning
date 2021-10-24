@@ -10,3 +10,11 @@ output "data_aws_availability_zones" {
 output "data_aws_account_id" {
   value = data.aws_caller_identity.current.account_id
 }
+
+output "ami_id" {
+  value = data.aws_ami.latest_ubuntu.id
+}
+
+output "ami_name" {
+  value = data.aws_ami.latest_ubuntu.name
+}

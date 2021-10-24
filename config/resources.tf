@@ -27,6 +27,33 @@ resource "aws_instance" "my_web_server" {
   tags = {
     Name = "My Web Server Instance"
   }
+
+  depends_on = [
+    aws_instance.my_web_server_db
+  ]
+}
+
+resource "aws_instance" "my_web_server_db" {
+
+  ami           = "ami-4d6as54f5as4f6asf46a"
+  instance_type = "t3.micro"
+
+  vpc_security_group_ids = [
+    aws_security_group.my_webserver_sg
+  ]
+
+  user_data = templatefile("user_data.sh.tpl", {
+    f_name = "Pavel",
+    l_name = "Bazhko",
+    names = [
+      "str1",
+      "str2"
+    ]
+  })
+
+  tags = {
+    Name = "My Web Server Database"
+  }
 }
 
 resource "aws_security_group" "my_webserver_sg" {
@@ -63,8 +90,10 @@ resource "aws_security_group" "my_webserver_sg" {
   }
 
   lifecycle {
-    prevent_destroy       = false
-    ignore_changes        = ["ami", "user_data"]
+    prevent_destroy = false
+    ignore_changes = [
+      "ami",
+    "user_data"]
     create_before_destroy = true
   }
 }
